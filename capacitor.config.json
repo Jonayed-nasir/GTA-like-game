@@ -1,0 +1,12 @@
+{
+  "appId": "com.gtadhaka.cityofchaos",
+  "appName": "GTA Dhaka",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "android": {
+    "backgroundColor": "#0b0f17",
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  }
+}

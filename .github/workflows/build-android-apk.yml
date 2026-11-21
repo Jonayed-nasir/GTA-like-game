@@ -1,0 +1,58 @@
+name: Build GTA Dhaka Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Java 21 (for Android Gradle)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install dependencies & build web bundle
+        run: |
+          npm install
+          npm run build
+
+      - name: Initialize Capacitor Android project (Landscape Fullscreen)
+        run: |
+          npm install --no-save @capacitor/core @capacitor/cli @capacitor/android
+          npx cap add android
+          npx cap sync android
+          # Force landscape orientation in AndroidManifest.xml
+          sed -i 's/android:launchMode="singleTask"/android:launchMode="singleTask" android:screenOrientation="sensorLandscape"/' android/app/src/main/AndroidManifest.xml
+
+      - name: Build Debug APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Copy APK to GTA-Dhaka-Landscape.apk
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk GTA-Dhaka-Landscape.apk
+
+      - name: Upload Downloadable APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GTA-Dhaka-Landscape-APK
+          path: GTA-Dhaka-Landscape.apk
+          retention-days: 90

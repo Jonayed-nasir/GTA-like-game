@@ -1,0 +1,6 @@
+{
+  "name": "GTA Dhaka: City of Chaos",
+  "description": "Realistic 3D open-world Dhaka city game prototype built with Three.js and WebGL, featuring Gulshan, Hatirjheel waterfront, Dhaka traffic, CNG auto-rickshaws, mobile touch controls, mini-map, and dynamic day/night lighting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
